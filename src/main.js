@@ -13,7 +13,7 @@ import { ConfigClass } from './config.js';
     var config = c.dev();
 
     var dataExtensions = {
-        log: "ContactDeleteAutomationLog",
+        log: "ENT.ContactDeleteAutomationLog",//remove ENT if running from parent bu
         tokenstorage: "tokenstorage"
     }
 
@@ -24,17 +24,19 @@ try{
     var req = getDE(sourceDE);
 
     //write initial row to log
-    var log = new LogClass(dataExtensions.log);
-        log.initLog(sourceDE,req.Results[0].CategoryID,guid);
+    //var log = new LogClass(dataExtensions.log);
+    //log.initLog(sourceDE,req.Results[0].CategoryID,guid);
+    Platform.Function.UpsertData(dataExtensions.log,['run_id'],[guid],['source_de','source_de_folder_id','start_time'],[sourceDE,req.Results[0].CategoryID,Platform.Function.Now()]);
+
+
+
 
     if(req.Results.length == 0){
-        var errorMsg = "Data Extension Not found";
-        log.error(errorMsg,guid);
+        Platform.Function.UpsertData(dataExtensions.log,['run_id'],[guid],['error_message'],['Data Extension Not found']);
         Platform.Function.RaiseError(errorMsg,false,"statusCode","3");
     }
     if(req.Results[0].IsSendable == false){
-        var errorMsg = "Data Extension is not sendable, quitting...";
-        log.error(errorMsg,guid);
+        Platform.Function.UpsertData(dataExtensions.log,['run_id'],[guid],['error_message'],['Data Extension is not sendable, quitting...']);
         Platform.Function.RaiseError(errorMsg,false,"statusCode","3");
     }
 
@@ -71,7 +73,7 @@ try{
         //var acctJob = openBulkReq(instance, sftoken, 'Account', 'delete',config.sf.apiVersion);
         //Output(Stringify(acctJob),3);
 
-        //Write job to a DE
+        //Write bulk job id to a DE ContactDeleteAutomationLog
 
 
         //var batch = processBatch(instance, sftoken, acctJob.id, id, cols, vals);

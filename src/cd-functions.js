@@ -11,7 +11,12 @@ export function getDE(deName){
     };
     return api.retrieve("DataExtension",["Name","IsSendable","CategoryID"],filter);    
 }
-
+/**
+ * 
+ * @param {*} deKey - The CustomerKey of the de you are trying to write to
+ * Note that this function won't work if you are calling it from a child
+ * business unit to update a DE that is in the Shared Data Extensions folder
+ */
 export function LogClass(deKey){
     this.api = new Script.Util.WSProxy();
     this.updateObject = {
