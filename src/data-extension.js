@@ -1,4 +1,4 @@
-import { Stringify, Output, scriptUtilRequest } from "./functions";
+import { Stringify, Output, scriptUtilRequest } from "./ref/functions";
 
 function getDERowsSOAP(key, filter) {
     /**

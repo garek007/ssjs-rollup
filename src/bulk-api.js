@@ -1,5 +1,5 @@
+import { Stringify, Output, scriptUtilRequest } from "./ref/functions";
 /** Salesforce Bulk API Functions */
-import { Stringify, Output, scriptUtilRequest } from "./functions";
 
 /**
  * 

@@ -1,3 +1,10 @@
+/**
+ * Writes a string to the page response and optionally adds one or more line breaks.
+ * Primarily used for debugging or outputting text in server-side scripts.
+ *
+ * @param {string} str - The string to write to the response.
+ * @param {number} [linebreaks=1] - The number of line breaks to append (default is 1).
+ */
 export function Output(str,linebreaks) {
     Platform.Response.Write(str);
     linebreaks = linebreaks || 1;
@@ -5,12 +12,28 @@ export function Output(str,linebreaks) {
         Platform.Response.Write("\r\n");
     }
  }
+/**
+ * Converts a JavaScript object into a JSON-formatted string.
+ * Wrapper for the Marketing Cloud Platform.Function.Stringify() method.
+ *
+ * @param {object} obj - The object to stringify.
+ * @returns {string} JSON representation of the input object.
+ */
 export function Stringify(obj) {
     return Platform.Function.Stringify(obj);
 }
 export function writeLogWSProxy(message){
 
 }
+/**
+ * Checks a Data Extension for a valid (non-expired) authentication token for a given system.
+ * If no valid token exists, requests a new one and stores it back into the Data Extension.
+ *
+ * @param {string} system - The name of the system ("Marketing Cloud", "Beamery", etc.).
+ * @param {object} config - The configuration object containing credentials and URLs.
+ * @param {string} dataExtension - The external key of the Data Extension that stores tokens.
+ * @returns {string} The existing or newly retrieved token.
+ */
 export function checkForStoredToken(system,config,dataExtension){
     var prox = new Script.Util.WSProxy();   
     var rightNow = new Date();
@@ -78,6 +101,16 @@ export function checkForStoredToken(system,config,dataExtension){
     }
 
 }
+/**
+ * Authenticates with the Marketing Cloud API using client credentials.
+ * Sends a POST request to the authentication endpoint and retrieves an access token.
+ *
+ * @param {string} subdomain - The subdomain for the MC API (e.g., "mc123abc").
+ * @param {string} accountid - The MID (account ID) for the target Marketing Cloud account.
+ * @param {string} clientid - The client ID for the API integration.
+ * @param {string} clientsecret - The client secret for the API integration.
+ * @returns {string} The retrieved access token, or undefined if an error occurs.
+ */
 function authMC(subdomain,accountid,clientid,clientsecret){
 
     var baseURI = 'https://'+subdomain+'.auth.marketingcloudapis.com/';
@@ -96,7 +129,18 @@ function authMC(subdomain,accountid,clientid,clientsecret){
         Output("<br>e: " + Stringify(e));
      }
 }
-
+/**
+ * Sends an HTTP request using Script.Util.HttpRequest and returns the response.
+ * Can be used for GET, POST, or PATCH requests with optional headers and payloads.
+ *
+ * @param {string} url - The target URL for the request.
+ * @param {string} method - The HTTP method (e.g., "GET", "POST", "PATCH").
+ * @param {string} headerName - The name of the header to include.
+ * @param {string} headerValue - The value of the header to include.
+ * @param {string} [postData] - Optional JSON payload for POST/PATCH requests.
+ * @param {string} [contentType='application/json'] - The content type for the request.
+ * @returns {object} The HTTP response object or an error object on failure.
+ */
 export function scriptUtilRequest(url,method,headerName,headerValue,postData,contentType){
     var req = new Script.Util.HttpRequest(url);
 
@@ -117,10 +161,7 @@ try{
 
     }catch(e){
         //res.errors.push({ErrorMsg:e.message,ErrorDescription:e.description,IP_Address:Platform.Request.ClientIP});
-        var message = "Failed at Authentication: "+e.message;
-        Output(message);
-        Output("\r\n");
-        Output(e.description);
+        return e;
         //logFailed({ErrorMsg:message,ErrorDescription:e.description},"not_applicable");
     }
     
