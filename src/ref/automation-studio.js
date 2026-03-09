@@ -91,25 +91,15 @@ function parameter(name,value){
 
 /**
  * 
- * @param {number} startDay - day data extract will start
- * @param {number} endDay - day data extract will end
- * @param {number} year - current year, used to build datetime string
- * @param {number} month - current month, used to build datetime string
  * @param {string} token - MC token
  * @param {string} id - id of data extract
  * @param {string} url - MC rest URL
  * @param {string} filename - Output filename
  * @returns {object|string} Parsed JSON response on success or an error message on failure.
  */
-export function dataExtractUpdate(startDay, endDay, year, month, token, id, url, filename) {
-
+export function dataExtractUpdate(startDateTime, endDateTime, token, id, url, filename) {
 
     var endpoint = 'automation/v1/dataextracts/'+id;
-
-
-    var startDateTime = month+'/'+startDay+'/'+year+' 12:00:00 AM';
-    var endDateTime = month+'/'+endDay+'/'+year+' 11:59:59 PM';
-
 
     var updateObject = {};
         updateObject.dataExtractTypeId = 'c7219016-a7f0-4c72-8657-1ec12c28a0db';
