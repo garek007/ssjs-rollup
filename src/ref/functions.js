@@ -8,7 +8,7 @@
 export function Output(str,linebreaks) {
     Platform.Response.Write(str);
     linebreaks = linebreaks || 1;
-    for(var line in linebreaks){
+    for(var i = 0; i < linebreaks; i++){
         Platform.Response.Write("\r\n");
     }
  }
@@ -21,6 +21,9 @@ export function Output(str,linebreaks) {
  */
 export function Stringify(obj) {
     return Platform.Function.Stringify(obj);
+}
+export function getQueryParam(x){
+    return Platform.Request.GetQueryStringParameter(x);
 }
 export function writeLogWSProxy(message){
 
